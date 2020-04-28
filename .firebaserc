@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "angular-weather-eab80": {
+      "hosting": {
+        "angular-weather": [
+          "angular-weather-eab80"
+        ]
+      }
+    }
+  }
+}
