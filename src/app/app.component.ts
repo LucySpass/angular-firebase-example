@@ -1,11 +1,12 @@
 import {Component} from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from "@angular/fire/firestore";
+import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firestore";
 import {Observable} from "rxjs";
 
-export interface Item {
+export interface TaskInterface {
   name: string;
-  date: string;
+  date: Date;
   text: string;
+  taskId?: string
 }
 
 @Component({
@@ -14,30 +15,46 @@ export interface Item {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  items: Observable<any[]>;
-  length: number = 0;
-  isAddingItemEnabled: boolean = false;
-  private itemsCollection: AngularFirestoreCollection<Item>;
-  private itemDoc: AngularFirestoreDocument<Item>;
+  public tasks: Observable<any[]>;
+  public length: number = 0;
+  public isTaskFormShown: boolean = false;
+  public editItem: any = null;
+  private itemsCollection: AngularFirestoreCollection<TaskInterface>;
 
-  constructor(firestore: AngularFirestore) {
-    this.itemsCollection = firestore.collection<Item>('tasks');
+  constructor(private tasksBd: AngularFirestore) {
+    this.itemsCollection = tasksBd.collection<TaskInterface>('tasks');
     this.itemsCollection.valueChanges().subscribe((a) => {
+      console.log(a);
       this.length = a.length;
     })
-    this.items = this.itemsCollection.valueChanges();
+    this.tasks = this.itemsCollection.valueChanges({idField: 'taskId'});
   }
 
-  addElement(item: Item) {
-    this.itemsCollection.add(item)
-    this.isAddingItemEnabled = false
+  public onAdditionClick() {
+    this.isTaskFormShown = true
+    this.editItem = null
   }
 
-  convertToDate(date) {
+  public addElement(item: TaskInterface) {
+    if (this.editItem) {
+      this.tasksBd.doc<TaskInterface>('tasks/' + item.taskId).update(item)
+    } else {
+      this.itemsCollection.add(item)
+    }
+    this.isTaskFormShown = false
+  }
+
+  public convertToDate(date) {
     console.log(date);
+    return new Date(date.seconds)
   }
 
-  onDeleteClick() {
+  public onDeleteClick(id: number) {
+    this.tasksBd.doc<TaskInterface>('tasks/' + id).delete()
+  }
 
+  public onEditClick(task) {
+    this.editItem = {...task}
+    this.isTaskFormShown = true
   }
 }

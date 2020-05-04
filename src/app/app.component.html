@@ -1,31 +1,35 @@
-<mat-toolbar>
+<mat-toolbar color="primary">
   <span>Weather application</span>
 </mat-toolbar>
 <div class="container">
   <h2>Current tasks</h2>
   <h4>Total: {{length}}</h4>
-  <button (click)="isAddingItemEnabled=true" color="accent" mat-mini-fab>
+  <button (click)="onAdditionClick()" color="accent" mat-mini-fab>
     <mat-icon>add</mat-icon>
   </button>
-  <div *ngIf="isAddingItemEnabled">
+  <div *ngIf="isTaskFormShown">
     <mat-card>
-      <app-item-form (added)="addElement($event)" (canceled)="isAddingItemEnabled=false"></app-item-form>
+      <app-item-form (added)="addElement($event)" (canceled)="isTaskFormShown=false"
+                     [item]="editItem"></app-item-form>
     </mat-card>
   </div>
-  <div *ngIf="!isAddingItemEnabled">
-    <mat-card *ngFor="let item of items | async" class="text">
-      <mat-card-title>{{item.name}}</mat-card-title>
-      <mat-card-subtitle>{{convertToDate(item.date.seconds) | date:'dd/MM/yyyy'}}</mat-card-subtitle>
+  <div *ngIf="!isTaskFormShown">
+    <mat-card *ngFor="let task of tasks | async" class="text">
+      <mat-card-title>{{task.name}}</mat-card-title>
+      <mat-card-subtitle>{{task.date.seconds * 1000 | date: "dd.MM.y hh:mm:ss"}}</mat-card-subtitle>
       <mat-card-content>
         <ul>
           <li>
-            {{item.text}}
+            {{task.text}}
           </li>
         </ul>
       </mat-card-content>
-      <mat-card-actions *ngIf="!isAddingItemEnabled">
-        <button (click)="onDeleteClick()" color="accent" mat-mini-fab>
+      <mat-card-actions *ngIf="!isTaskFormShown">
+        <button (click)="onDeleteClick(task.taskId)" color="accent" mat-mini-fab>
           <mat-icon>delete</mat-icon>
+        </button>
+        <button (click)="onEditClick(task)" color="accent" mat-mini-fab>
+          <mat-icon>edit</mat-icon>
         </button>
       </mat-card-actions>
     </mat-card>

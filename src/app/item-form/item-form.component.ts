@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
-import {Item} from "../app.component";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {TaskInterface} from "../app.component";
 
 @Component({
   selector: 'app-item-form',
@@ -8,17 +8,31 @@ import {Item} from "../app.component";
   styleUrls: ['./item-form.component.scss'],
   providers: [FormBuilder]
 })
-export class ItemFormComponent {
-  formData: any;
-  today:any = new Date();
-  @Output() added = new EventEmitter<Item>();
+export class ItemFormComponent implements OnInit {
+  taskForm: FormGroup;
+  today: any = new Date();
+  @Output() added = new EventEmitter<TaskInterface>();
   @Output() canceled = new EventEmitter<null>();
+  @Input() item: any;
+  private initialState: TaskInterface = {
+    name: '',
+    text: '',
+    date: new Date(),
+    taskId: ''
+  }
 
   constructor(private formBuilder: FormBuilder,) {
-    this.formData = this.formBuilder.group({
-      name: '',
-      text: '',
-      date: ''
-    });
+    this.taskForm = this.formBuilder.group(this.initialState);
+  }
+
+  public ngOnInit() {
+    if (this.item && typeof this.item !== 'undefined') {
+      this.taskForm.setValue(this.item)
+    }
+  }
+
+  public onCancelClick() {
+    this.taskForm.reset()
+    this.canceled.emit()
   }
 }

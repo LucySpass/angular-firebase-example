@@ -1,21 +1,20 @@
-<form (ngSubmit)="added.emit(formData.value)" [formGroup]="formData" class="container">
+<form (ngSubmit)="added.emit(taskForm.value)" [formGroup]="taskForm" class="container">
   <mat-form-field appearance="legacy">
-    <mat-label>Name</mat-label>
-    <input formControlName="name" id="name" matInput placeholder="Name" type="text">
+    <mat-label>Title</mat-label>
+    <input formControlName="name" id="name" matInput placeholder="Title" type="text">
   </mat-form-field>
   <mat-form-field appearance="legacy">
-    <mat-label>Text</mat-label>
-    <input formControlName="text" id="text" matInput placeholder="Text" type="text">
+    <mat-label>Task</mat-label>
+    <input formControlName="text" id="text" matInput placeholder="Task" type="text">
   </mat-form-field>
   <mat-form-field appearance="legacy">
-    <mat-label>Date</mat-label>
-    <input [matDatepicker]="picker" [min]="today" formControlName="date" id="date" matInput matInput placeholder="Date"
-           type="date">
+    <mat-label>Date created</mat-label>
+    <input [matDatepicker]="picker" [min]="today" formControlName="date" id="date" matInput placeholder="Date created">
     <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
   <div>
     <button color="accent" mat-raised-button type="submit">Submit</button>
-    <button (click)="canceled.emit()" color="primary" mat-raised-button>Cancel</button>
+    <button (click)="onCancelClick()" color="primary" mat-raised-button>Cancel</button>
   </div>
 </form>
