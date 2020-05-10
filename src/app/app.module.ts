@@ -17,11 +17,15 @@ import {MatInputModule} from "@angular/material/input";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {ReactiveFormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
+import {ConfigService, ErrorSnackBar} from "../config.service";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
     AppComponent,
-    ItemFormComponent
+    ItemFormComponent,
+    ErrorSnackBar
   ],
   imports: [
     BrowserModule,
@@ -29,6 +33,9 @@ import {ReactiveFormsModule} from "@angular/forms";
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    // Material modules:
     MatToolbarModule,
     MatCardModule,
     MatIconModule,
@@ -37,10 +44,11 @@ import {ReactiveFormsModule} from "@angular/forms";
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    ReactiveFormsModule
+    MatSnackBarModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [ConfigService],
+  bootstrap: [AppComponent],
+  entryComponents: [ErrorSnackBar]
 })
 export class AppModule {
 }

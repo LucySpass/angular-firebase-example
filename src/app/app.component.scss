@@ -10,3 +10,8 @@ mat-card {
 button {
   margin-right: 16px;
 }
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+}
