@@ -5,12 +5,12 @@ import {catchError, tap} from 'rxjs/operators';
 import {MatSnackBar, MAT_SNACK_BAR_DATA} from '@angular/material/snack-bar'
 
 @Injectable()
-export class ConfigService {
+export class ApiService {
   private weatherUrl = 'http://localhost:5000';
   private token: string;
   private adminToken: string;
 
-  constructor(private http: HttpClient, private _snackBar: MatSnackBar) {
+  constructor(private http: HttpClient) {
   }
 
   public getToken(): Observable<any> {
@@ -22,7 +22,6 @@ export class ConfigService {
             console.log('getDataWithToken', a);
           })
         }),
-        catchError(this.handleError('getToken'))
       );
   }
 
@@ -35,7 +34,6 @@ export class ConfigService {
             console.log('getDataWithToken', a);
           })
         }),
-        catchError(this.handleError('getAdminToken'))
       );
   }
 
@@ -45,34 +43,14 @@ export class ConfigService {
       'Authorization': `bearer: ${this.adminToken}`
     })
     return this.http.get<any>(this.weatherUrl + '/weatherforecast/summaries', {headers})
-      .pipe(
-        catchError(this.handleError('getDataWithToken'))
-      );
   }
 
   public getWeeklyForecast(): Observable<any> {
     return this.http.get<any>(this.weatherUrl + '/weatherforecast/week')
-      .pipe(
-        catchError(this.handleError('getWeeklyForecast'))
-      );
   }
 
   public getForecast(): Observable<any> {
     return this.http.get<any>(this.weatherUrl + '/api/auth/token/secret')
-      .pipe(
-        catchError(this.handleError('getForecast'))
-      );
-  }
-
-  private handleError(operation: string, result?: any) {
-    return (error: any): Observable<any> => {
-      console.error(error);
-      this._snackBar.openFromComponent(ErrorSnackBar, {
-        duration: 5000,
-        data: `Server error in ${operation}: ${error.statusText}`,
-      });
-      return of(result);
-    };
   }
 }
 
@@ -88,5 +66,6 @@ export class ConfigService {
   `],
 })
 export class ErrorSnackBar {
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) { }
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {
+  }
 }

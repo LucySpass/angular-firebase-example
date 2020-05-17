@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firestore";
 import {Observable} from "rxjs";
-import {ConfigService} from "../config.service";
+import {ApiService} from "../api.service";
 
 export interface TaskInterface {
   name: string;
@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   public editItem: any = null;
   private itemsCollection: AngularFirestoreCollection<TaskInterface>;
 
-  constructor(private tasksBd: AngularFirestore, private serverApi: ConfigService) {
+  constructor(private tasksBd: AngularFirestore, private serverApi: ApiService) {
     this.itemsCollection = tasksBd.collection<TaskInterface>('tasks');
     this.itemsCollection.valueChanges().subscribe((a) => {
       console.log(a);

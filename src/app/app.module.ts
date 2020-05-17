@@ -17,9 +17,10 @@ import {MatInputModule} from "@angular/material/input";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {ReactiveFormsModule} from "@angular/forms";
-import {HttpClientModule} from "@angular/common/http";
-import {ConfigService, ErrorSnackBar} from "../config.service";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {ApiService, ErrorSnackBar} from "../api.service";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {Interceptor} from "../interceptor";
 
 @NgModule({
   declarations: [
@@ -46,7 +47,10 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     MatNativeDateModule,
     MatSnackBarModule,
   ],
-  providers: [ConfigService],
+  providers: [
+    ApiService,
+    {provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true}
+  ],
   bootstrap: [AppComponent],
   entryComponents: [ErrorSnackBar]
 })
