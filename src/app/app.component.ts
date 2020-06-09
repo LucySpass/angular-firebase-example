@@ -2,13 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firestore";
 import {Observable} from "rxjs";
 import {ApiService} from "../api.service";
-
-export interface TaskInterface {
-  name: string;
-  date: Date;
-  text: string;
-  taskId?: string
-}
+import {WeatherPopupComponent} from "./weather-popup/weather-popup.component";
+import {MatDialog} from "@angular/material/dialog";
+import {TaskInterface} from "./models/task.interface";
+import {WeeklyForecastInterface} from "./models/weekly-forecast.interface";
 
 @Component({
   selector: 'app-root',
@@ -21,8 +18,9 @@ export class AppComponent implements OnInit {
   public isTaskFormShown: boolean = false;
   public editItem: any = null;
   private itemsCollection: AngularFirestoreCollection<TaskInterface>;
+  private $weeklyForecast: Observable<WeeklyForecastInterface[]> = this.serverApi.getWeeklyForecast();
 
-  constructor(private tasksBd: AngularFirestore, private serverApi: ApiService) {
+  constructor(private tasksBd: AngularFirestore, private serverApi: ApiService, public dialog: MatDialog) {
     this.itemsCollection = tasksBd.collection<TaskInterface>('tasks');
     this.itemsCollection.valueChanges().subscribe((a) => {
       console.log(a);
@@ -32,23 +30,26 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.serverApi.getAdminToken().subscribe((a) => {
-      console.log('getAdminToken', a);
+    this.serverApi.getAdminToken().subscribe(() => {
     })
-    this.serverApi.getForecast().subscribe((a) => {
-      console.log('getForecast', a);
-    })
-    this.serverApi.getToken().subscribe((a) => {
-      console.log('getToken', a);
-    })
-    this.serverApi.getWeeklyForecast().subscribe((a) => {
-      console.log('getWeeklyForecast', a);
-    })
+    //
+    // this.serverApi.getWeeklyForecast().subscribe((a) => {
+    //   this.weeklyForecast
+    //   console.log('getWeeklyForecast', a);
+    // })
   }
 
   public onAdditionClick() {
     this.isTaskFormShown = true
     this.editItem = null
+  }
+
+  public onSettingsButtonClick() {
+    this.dialog.open(WeatherPopupComponent, {
+      data: {
+        $weeklyForecast: this.$weeklyForecast
+      }
+    });
   }
 
   public addElement(item: TaskInterface) {

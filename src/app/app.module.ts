@@ -21,12 +21,16 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {ApiService, ErrorSnackBar} from "../api.service";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {Interceptor} from "../interceptor";
+import {WeatherPopupComponent} from './weather-popup/weather-popup.component';
+import {CommonModule} from "@angular/common";
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
     AppComponent,
     ItemFormComponent,
-    ErrorSnackBar
+    ErrorSnackBar,
+    WeatherPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +40,7 @@ import {Interceptor} from "../interceptor";
     AngularFirestoreModule,
     ReactiveFormsModule,
     HttpClientModule,
+    CommonModule,
     // Material modules:
     MatToolbarModule,
     MatCardModule,
@@ -46,13 +51,14 @@ import {Interceptor} from "../interceptor";
     MatDatepickerModule,
     MatNativeDateModule,
     MatSnackBarModule,
+    MatDialogModule,
   ],
   providers: [
     ApiService,
     {provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true}
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ErrorSnackBar]
+  entryComponents: [ErrorSnackBar, WeatherPopupComponent]
 })
 export class AppModule {
 }

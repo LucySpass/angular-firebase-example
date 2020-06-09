@@ -10,28 +10,23 @@ export class ApiService {
   private token: string;
   private adminToken: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private _http: HttpClient) {
   }
 
-  public getToken(): Observable<any> {
-    return this.http.get<any>(this.weatherUrl + '/api/auth/token')
-      .pipe(
-        tap((result) => {
-          this.token = result.token;
-          this.getDataWithToken().subscribe((a) => {
-            console.log('getDataWithToken', a);
-          })
-        }),
-      );
+  public getToken(login, password): Observable<any> {
+    return this._http.post<any>(this.weatherUrl + '/api/auth/', {login, password})
   }
 
   public getAdminToken(): Observable<any> {
-    return this.http.get<any>(this.weatherUrl + '/api/auth/token/secret')
+    return this._http.get<any>(this.weatherUrl + '/api/auth/token/secret')
       .pipe(
         tap((result) => {
           this.adminToken = result.token;
           this.getDataWithToken().subscribe((a) => {
             console.log('getDataWithToken', a);
+          })
+          this.getToken('admin', 'admin').subscribe((a) => {
+            console.log('getToken', a);
           })
         }),
       );
@@ -40,17 +35,17 @@ export class ApiService {
   public getDataWithToken(): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `bearer: ${this.adminToken}`
+      'Authorization': `Bearer ${this.adminToken}`
     })
-    return this.http.get<any>(this.weatherUrl + '/weatherforecast/summaries', {headers})
+    return this._http.get<any>(this.weatherUrl + '/weatherforecast/summaries', {headers})
   }
 
   public getWeeklyForecast(): Observable<any> {
-    return this.http.get<any>(this.weatherUrl + '/weatherforecast/week')
+    return this._http.get<any>(this.weatherUrl + '/weatherforecast/week')
   }
 
   public getForecast(): Observable<any> {
-    return this.http.get<any>(this.weatherUrl + '/api/auth/token/secret')
+    return this._http.get<any>(this.weatherUrl + '/api/auth/token/secret')
   }
 }
 

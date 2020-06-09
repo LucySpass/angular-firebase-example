@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {TaskInterface} from "../app.component";
+import {TaskInterface} from "../models/task.interface";
 
 @Component({
   selector: 'app-item-form',
