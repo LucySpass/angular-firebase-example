@@ -1,16 +1,26 @@
-.weekly-forecast-row {
-  margin-bottom: 16px;
-  width: 280px;
-  display: grid;
-  grid-template-columns: 100px 30px 50px 62px;
-  justify-content: space-between;
+.weather-popup-container {
+  width: 300px;
+  position: relative;
 
-  .temperature-container {
-    display: flex;
-    flex-direction: column;
+  .weather-popup-close-button {
+    position: absolute;
+    right: 0;
+    top: -4px;
   }
 
-  .summary-text {
-    text-align: right;
+  .weekly-forecast-row {
+    margin-bottom: 16px;
+    display: grid;
+    grid-template-columns: 100px 30px 50px 62px;
+    justify-content: space-between;
+
+    .temperature-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .summary-text {
+      text-align: right;
+    }
   }
 }

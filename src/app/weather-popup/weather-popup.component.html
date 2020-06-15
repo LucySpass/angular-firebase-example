@@ -1,16 +1,28 @@
-<h1 mat-dialog-title>Weekly weather forecast</h1>
-<div mat-dialog-content>
-  <div *ngFor="let forecast of data.$weeklyForecast | async">
-    <div class="weekly-forecast-row">
-      <div>{{forecast.date | date:'dd.MM.yyyy'}}</div>
-      <mat-icon color="accent">
-        {{forecast.temperatureC < 5 ? 'ac_unit' : forecast.temperatureC >= 5 && forecast.temperatureC < 20 ? 'cloud_queue' : 'wb_sunny'}}
-      </mat-icon>
-      <div class="temperature-container">
-        <div>{{forecast.temperatureC}}°C</div>
-        <div>{{forecast.temperatureF}}°F</div>
+<div class="weather-popup-container">
+  <div (click)="onCloseClick()" class="weather-popup-close-button">
+    <button aria-label="Example icon button with a vertical three dot icon" mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div *ngIf="(data.$weeklyForecast | async)?.length > 0; else noData">
+    <h1 mat-dialog-title>Weekly weather forecast</h1>
+    <div mat-dialog-content>
+      <div *ngFor="let forecast of data.$weeklyForecast | async">
+        <div class="weekly-forecast-row">
+          <div>{{forecast.date | date:'dd.MM.yyyy'}}</div>
+          <mat-icon color="accent">
+            {{forecast.temperatureC < 5 ? 'ac_unit' : forecast.temperatureC >= 5 && forecast.temperatureC < 20 ? 'cloud_queue' : 'wb_sunny'}}
+          </mat-icon>
+          <div class="temperature-container">
+            <div>{{forecast.temperatureC}}°C</div>
+            <div>{{forecast.temperatureF}}°F</div>
+          </div>
+          <div class="summary-text">{{forecast.summary}}</div>
+        </div>
       </div>
-      <div class="summary-text">{{forecast.summary}}</div>
     </div>
   </div>
+  <ng-template #noData>
+    <h2 mat-dialog-title>There is no forecast <br/> for the next week!</h2>
+  </ng-template>
 </div>
